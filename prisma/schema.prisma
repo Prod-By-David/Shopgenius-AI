@@ -1,0 +1,76 @@
+// Esquema de datos de ShopGenius AI.
+// SQLite en desarrollo; para producción cambia provider a "postgresql" y
+// DATABASE_URL, y regenera las migraciones (ver docs/DEPLOYMENT.md).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id                  String    @id
+  shop                String
+  state               String
+  isOnline            Boolean   @default(false)
+  scope               String?
+  expires             DateTime?
+  accessToken         String
+  userId              BigInt?
+  firstName           String?
+  lastName            String?
+  email               String?
+  accountOwner        Boolean   @default(false)
+  locale              String?
+  collaborator        Boolean?  @default(false)
+  emailVerified       Boolean?  @default(false)
+  refreshToken        String?
+  refreshTokenExpires DateTime?
+}
+
+model ShopSettings {
+  id                     String       @id @default(cuid())
+  shop                   String       @unique
+  plan                   String       @default("FREE")
+  subscriptionId         String?
+  subscriptionStatus     String?
+  trialEndsAt            DateTime?
+  aiProvider             String       @default("demo")
+  aiModel                String?
+  aiApiKeyEnc            String?
+  defaultTone            String       @default("profesional")
+  defaultLanguage        String       @default("es")
+  defaultKeywords        String?
+  brandVoice             String?
+  storeDescription       String?
+  monthlyGenerationLimit Int?
+  onboardedAt            DateTime?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  generations            Generation[]
+}
+
+model Generation {
+  id             String        @id @default(cuid())
+  shop           String
+  type           String        @default("PRODUCT_DESCRIPTION")
+  productId      String?
+  productTitle   String?
+  provider       String
+  model          String
+  inputJson      String
+  outputJson     String
+  tokensIn       Int           @default(0)
+  tokensOut      Int           @default(0)
+  applied        Boolean       @default(false)
+  appliedAt      DateTime?
+  createdAt      DateTime      @default(now())
+  shopSettingsId String?
+  shopSettings   ShopSettings? @relation(fields: [shopSettingsId], references: [id], onDelete: SetNull)
+
+  @@index([shop, createdAt])
+  @@index([shop, productId])
+}
