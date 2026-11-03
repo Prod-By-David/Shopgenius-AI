@@ -1,0 +1,62 @@
+# Configuración de la app para Shopify CLI.
+# 1) Ejecuta `npm run config:link` para vincularla a tu app de Shopify Partners.
+# 2) `npm run dev` rellena client_id automáticamente.
+
+client_id = ""
+
+name = "ShopGenius AI"
+handle = "shopgenius-ai"
+application_url = "https://shopgenius-ai.example.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+include_config_on_deploy = true
+
+[access_scopes]
+scopes = "read_products,write_products"
+
+[auth]
+redirect_urls = [
+  "https://shopgenius-ai.example.com/auth/callback",
+  "https://shopgenius-ai.example.com/auth/shopify/callback",
+  "https://shopgenius-ai.example.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2025-01"
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/app/uninstalled"
+  topics = ["app/uninstalled"]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/app/scopes_update"
+  topics = ["app/scopes_update"]
+
+  # Sincroniza el plan cuando Shopify cambia la suscripción
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/app_subscriptions/update"
+  topics = ["app_subscriptions/update"]
+
+  # Webhooks obligatorios de privacidad (apps públicas)
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/customers/data_request"
+  compliance_topics = ["customers/data_request"]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/customers/redact"
+  compliance_topics = ["customers/redact"]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/shop/redact"
+  compliance_topics = ["shop/redact"]
+
+[pos]
+embedded = false
+
+[app_proxy]
+# Opcional: activa solo si publicas el recomendador en la tienda online.
+# url = "https://shopgenius-ai.example.com/proxy"
+# subpath = "shopgenius"
+# prefix = "apps"
