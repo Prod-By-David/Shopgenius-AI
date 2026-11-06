@@ -14,6 +14,7 @@ automatically_update_urls_on_dev = true
 include_config_on_deploy = true
 
 [access_scopes]
+# Permisos ajustados y mínimos necesarios para gestionar catálogo
 scopes = "read_products,write_products"
 
 [auth]
@@ -26,37 +27,41 @@ redirect_urls = [
 [webhooks]
 api_version = "2025-01"
 
+  # Webhook de desinstalación de la app
   [[webhooks.subscriptions]]
-  uri = "/webhooks/app/uninstalled"
+  uri = "/webhooks"
   topics = ["app/uninstalled"]
 
+  # Webhook de actualización de permisos/scopes
   [[webhooks.subscriptions]]
-  uri = "/webhooks/app/scopes_update"
+  uri = "/webhooks"
   topics = ["app/scopes_update"]
 
-  # Sincroniza el plan cuando Shopify cambia la suscripción
+  # Sincroniza el estado del plan cuando el cliente aprueba/cancela el cobro
   [[webhooks.subscriptions]]
-  uri = "/webhooks/app_subscriptions/update"
+  uri = "/webhooks"
   topics = ["app_subscriptions/update"]
 
-  # Webhooks obligatorios de privacidad (apps públicas)
+  # -------------------------------------------------------------
+  # WEBHOOKS OBLIGATORIOS DE PRIVACIDAD / RGPD (Para la App Store)
+  # -------------------------------------------------------------
   [[webhooks.subscriptions]]
-  uri = "/webhooks/customers/data_request"
-  compliance_topics = ["customers/data_request"]
+  uri = "/webhooks"
+  topics = ["customers/data_request"]
 
   [[webhooks.subscriptions]]
-  uri = "/webhooks/customers/redact"
-  compliance_topics = ["customers/redact"]
+  uri = "/webhooks"
+  topics = ["customers/redact"]
 
   [[webhooks.subscriptions]]
-  uri = "/webhooks/shop/redact"
-  compliance_topics = ["shop/redact"]
+  uri = "/webhooks"
+  topics = ["shop/redact"]
 
 [pos]
 embedded = false
 
-[app_proxy]
-# Opcional: activa solo si publicas el recomendador en la tienda online.
+# [app_proxy]
+# Opcional: activa solo si vas a exponer endpoints públicos en el storefront (ej. widget recomendador en el tema del cliente).
 # url = "https://shopgenius-ai.example.com/proxy"
 # subpath = "shopgenius"
 # prefix = "apps"
