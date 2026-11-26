@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ShopGenius AI">
+  <rect width="64" height="64" rx="14" fill="#1f2937"/>
+  <path d="M32 12l4.6 11.4L48 28l-11.4 4.6L32 44l-4.6-11.4L16 28l11.4-4.6z" fill="#34d399"/>
+  <circle cx="47" cy="45" r="4" fill="#fbbf24"/>
+</svg>
