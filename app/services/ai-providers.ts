@@ -1,0 +1,47 @@
+import type { AiProviderId } from "./ai-core";
+
+/**
+ * Metadatos de proveedores de IA sin dependencias de servidor (seguro en cliente).
+ * Es la única fuente de verdad: `ai.server.ts` y las pantallas lo importan de aquí.
+ */
+export const PROVIDER_LABELS: Record<AiProviderId, string> = {
+  demo: "Modo demo (sin coste)",
+  openai: "OpenAI",
+  anthropic: "Anthropic (Claude)",
+  openrouter: "OpenRouter (Qwen, Llama, etc.)",
+  qwen: "Qwen (Alibaba DashScope)",
+};
+
+export const PROVIDER_ENV_KEYS: Record<Exclude<AiProviderId, "demo">, string> = {
+  openai: "OPENAI_API_KEY",
+  anthropic: "ANTHROPIC_API_KEY",
+  openrouter: "OPENROUTER_API_KEY",
+  qwen: "QWEN_API_KEY",
+};
+
+export const PROVIDER_IDS: AiProviderId[] = [
+  "demo",
+  "openai",
+  "anthropic",
+  "openrouter",
+  "qwen",
+];
+
+export function isProviderId(value: unknown): value is AiProviderId {
+  return typeof value === "string" && (PROVIDER_IDS as string[]).includes(value);
+}
+
+/**
+ * Modelo por defecto de cada proveedor. Se puede cambiar por tienda desde
+ * Ajustes o globalmente con la variable AI_MODEL.
+ */
+export const DEFAULT_MODELS: Record<AiProviderId, string> = {
+  demo: "demo-v1",
+  openai: "gpt-4o-mini",
+  anthropic: "claude-haiku-5-5",
+  openrouter: "qwen/qwen-2.5-72b-instruct",
+  qwen: "qwen-plus",
+};
+
+/** Alias histórico usado por las pantallas. */
+export const DEFAULT_MODEL_LABELS = DEFAULT_MODELS;
