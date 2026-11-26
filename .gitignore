@@ -1,0 +1,16 @@
+node_modules
+/build
+/.cache
+/public/build
+.env
+.env.*
+!.env.example
+prisma/*.sqlite
+prisma/*.sqlite-journal
+*.log
+.DS_Store
+.vscode
+.idea
+coverage
+extensions/*/dist
+extensions/*/node_modules
