@@ -1,0 +1,8 @@
+name = "shopgenius-ai"
+roles = ["frontend", "backend"]
+webhooks_path = "/webhooks/app/uninstalled"
+
+[commands]
+# setup-env crea .env (modo prueba, SQLite) si falta; sin DATABASE_URL Prisma falla (P1012).
+predev = "node scripts/setup-env.mjs && npm exec prisma generate"
+dev = "npm exec prisma migrate deploy && npm exec remix vite:dev"

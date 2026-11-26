@@ -1,0 +1,53 @@
+# Configuración de la app para Shopify CLI.
+# https://shopify.dev/docs/apps/tools/cli/configuration
+#
+# ⚠ `shopify app config link` SOBRESCRIBE este archivo con la configuración
+#   remota de Partners (y pierde los webhooks y el scope write_files). Si lo
+#   ejecutas, restaura este archivo desde el repositorio (ver README §5).
+#
+# MODO PRUEBA: el proyecto se entrega en modo prueba (APP_MODE=test, cargos de
+# prueba de Shopify). El paso a modo real se decide cuando se vaya a vender.
+
+client_id = "4046f0a8681a0eb6435cdfb2807cf965"
+name = "ShopGenius AI"
+application_url = "https://localhost:3000"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+include_config_on_deploy = true
+
+[access_scopes]
+# Permisos mínimos: leer/escribir productos y escribir archivos (alt text de
+# imágenes, mutación fileUpdate).
+scopes = "read_products,write_products,write_files"
+optional_scopes = [ ]
+# Instalación gestionada por Shopify (necesaria para el token exchange).
+use_legacy_install_flow = false
+
+[auth]
+redirect_urls = [ "https://localhost:3000/auth/callback" ]
+
+[webhooks]
+api_version = "2026-10"
+
+  # Desinstalación de la app
+  [[webhooks.subscriptions]]
+  topics = ["app/uninstalled"]
+  uri = "/webhooks/app/uninstalled"
+
+  # Cambio de permisos/scopes
+  [[webhooks.subscriptions]]
+  topics = ["app/scopes_update"]
+  uri = "/webhooks/app/scopes_update"
+
+  # Billing: sincroniza el plan cuando el comerciante aprueba/cancela el cobro
+  [[webhooks.subscriptions]]
+  topics = ["app_subscriptions/update"]
+  uri = "/webhooks/app_subscriptions/update"
+
+  # Webhooks obligatorios de privacidad / RGPD (requisito de la App Store).
+  # Los tres llegan al mismo endpoint: app/routes/webhooks.compliance.tsx
+  [[webhooks.subscriptions]]
+  compliance_topics = ["customers/data_request", "customers/redact", "shop/redact"]
+  uri = "/webhooks/compliance"
